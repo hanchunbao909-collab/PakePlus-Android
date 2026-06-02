@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>智慧菜篮 · 用户端APP</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="phone-shell" aria-label="智慧菜篮用户端APP">
+      <section class="app-screen">
+        <header class="top-bar">
+          <button class="location-pill" type="button" data-action="market-detail" aria-label="查看当前菜场">
+            <span class="pin">⌖</span>
+            <span>
+              <strong>春港社区菜场</strong>
+              <small>距你 680m · 东门自提柜</small>
+            </span>
+          </button>
+          <button class="round-btn" type="button" data-action="notifications" aria-label="消息提醒">铃</button>
+        </header>
+
+        <label class="search-box" aria-label="搜索">
+          <span>⌕</span>
+          <input id="searchInput" type="search" placeholder="搜青菜、摊主、菜谱、取货码" />
+        </label>
+
+        <div class="content" id="homeTab" data-tab-panel="home">
+          <section class="hero">
+            <div>
+              <p>今晚 22:30 前可取 · 24小时自提</p>
+              <h1>下班再晚，也能吃到新鲜实惠的放心菜</h1>
+              <div class="hero-actions">
+                <button class="primary-btn" type="button" data-action="quick-order">15秒下单</button>
+                <button class="soft-btn" type="button" data-action="group-buy">小区团购</button>
+              </div>
+            </div>
+            <div class="hero-visual" aria-hidden="true">
+              <span>🥬</span><span>🍅</span><span>🥩</span><span>🥚</span>
+            </div>
+          </section>
+
+          <section class="shortcut-strip" aria-label="快捷入口">
+            <button type="button" data-action="category" data-category="今日鲜菜">今日鲜菜<strong>36款</strong></button>
+            <button type="button" data-action="category" data-category="热门摊位">热门摊位<strong>8家</strong></button>
+            <button type="button" data-action="repeat-order">一键复购<strong>上次清单</strong></button>
+            <button type="button" data-action="scan-locker">扫码开柜<strong>离线可用</strong></button>
+          </section>
+
+          <section class="trust-row" aria-label="信任信息">
+            <article><span>农残检测</span><strong>未检出</strong></article>
+            <article><span>当日采摘</span><strong>07:20入场</strong></article>
+            <article><span>比超市省</span><strong id="savingText">12.6元</strong></article>
+          </section>
+
+          <section class="section-head">
+            <div>
+              <h2>应季蔬菜推荐</h2>
+              <p>真实照片轮播，点开可查看菜品实拍大图</p>
+            </div>
+            <button type="button" data-action="next-seasonal">换一批</button>
+          </section>
+
+          <section class="seasonal-carousel" id="seasonalCarousel" aria-label="应季蔬菜轮播推荐"></section>
+
+          <section class="section-head compact">
+            <div>
+              <h2>今晚可订</h2>
+              <p>摊主按单备货，可预约早/中/晚/夜间取货</p>
+            </div>
+            <button type="button" data-action="category" data-category="全部商品">全部</button>
+          </section>
+
+          <section class="product-list" id="productList" aria-label="商品列表"></section>
+        </div>
+
+        <div class="content hidden" id="ordersTab" data-tab-panel="orders">
+          <section class="pickup-card">
+            <div class="status-line">
+              <span>待取货</span>
+              <strong id="pickupTimer">剩余 42 分钟</strong>
+            </div>
+            <div class="code-panel">
+              <div>
+                <p>取货码</p>
+                <strong id="pickupCode">A8-2196</strong>
+                <small>无网络也能打开</small>
+              </div>
+              <button class="qr" type="button" data-action="qr-detail" aria-label="查看二维码"></button>
+            </div>
+            <div class="locker-info">
+              <span>春港社区菜场东门自提柜</span>
+              <strong>格口 12</strong>
+            </div>
+            <button class="primary-btn full" type="button" data-action="open-locker">扫码 / 一键开柜</button>
+            <button class="soft-btn full" type="button" data-action="navigate">导航到自提柜</button>
+          </section>
+
+          <section class="order-tabs" aria-label="订单状态">
+            <button class="active" type="button" data-order-status="待取货">待取货</button>
+            <button type="button" data-order-status="待备货">待备货</button>
+            <button type="button" data-order-status="已完成">已完成</button>
+            <button type="button" data-order-status="已取消">已取消</button>
+          </section>
+
+          <section class="order-timeline">
+            <button class="done" type="button" data-action="order-step" data-title="支付成功">支付成功<span>20:12</span></button>
+            <button class="done" type="button" data-action="order-step" data-title="摊主备货">摊主备货<span>20:18</span></button>
+            <button class="active" type="button" data-action="order-step" data-title="已入柜">已入柜<span>20:44</span></button>
+            <button type="button" data-action="order-step" data-title="等待取货">等待取货<span>22:30前</span></button>
+          </section>
+
+          <section class="trust-card">
+            <h2>本单信任卡片</h2>
+            <dl>
+              <div><dt>产地</dt><dd>惠州横沥合作农场</dd></div>
+              <div><dt>采摘</dt><dd>今日 06:10</dd></div>
+              <div><dt>配送</dt><dd>冷链 2小时内到柜</dd></div>
+              <div><dt>农残检测</dt><dd>未检出</dd></div>
+              <div><dt>摊主信用分</dt><dd>96 / 100</dd></div>
+              <div><dt>比超市便宜</dt><dd id="orderSaving">省 12.6 元</dd></div>
+            </dl>
+          </section>
+        </div>
+
+        <div class="content hidden" id="marketsTab" data-tab-panel="markets">
+          <button class="market-card featured" type="button" data-action="market-card-detail">
+            <div>
+              <p>附近菜市场</p>
+              <h2>春港社区菜场</h2>
+              <span>营业 06:00-22:00 · 自提柜 东门 · 夜间可取</span>
+            </div>
+            <strong>98%好评</strong>
+          </button>
+          <button class="map-card" type="button" data-action="map-detail">
+            <div class="map-lines"></div>
+            <div>
+              <strong>自提柜路线</strong>
+              <span>从小区南门步行 4 分钟，支持一键导航</span>
+            </div>
+          </button>
+          <section class="vendor-list" id="vendorList" aria-label="摊位列表"></section>
+        </div>
+
+        <div class="content hidden" id="profileTab" data-tab-panel="profile">
+          <section class="profile-card">
+            <div class="avatar">菜</div>
+            <div>
+              <h2>晚上也要好好吃饭</h2>
+              <p>积分 1280 · 优惠券 3 张 · 连续自提 6 天</p>
+            </div>
+          </section>
+          <button class="member-card" type="button" data-action="membership">
+            <span>本月已省</span>
+            <strong>¥48.6</strong>
+            <em>开通放心菜会员，再享检测赔付</em>
+          </button>
+          <section class="settings-list">
+            <button type="button" data-action="pickup-codes"><span>取货码收藏</span><strong>2个</strong></button>
+            <button type="button" data-action="coupons"><span>积分与优惠券</span><strong>3张可用</strong></button>
+            <button type="button" data-action="preferences"><span>自提偏好</span><strong>夜间优先</strong></button>
+            <button type="button" data-action="feedback"><span>意见反馈</span><strong>去填写</strong></button>
+            <button type="button" data-action="fault"><span>故障上报</span><strong>自提柜/订单</strong></button>
+            <button type="button" data-action="toggle-elder"><span>长辈模式</span><strong id="elderState">关闭</strong></button>
+          </section>
+        </div>
+
+        <div class="content hidden" id="freshBoxTab" data-tab-panel="freshBox">
+          <section class="recipe-card" data-action="recipe-detail">
+            <div>
+              <p>今日晚餐</p>
+              <h2>番茄牛肉汤 + 清炒时蔬</h2>
+              <span>3人份 · 25分钟 · 已搭好调料</span>
+            </div>
+            <button class="primary-btn" type="button" data-action="recipe-buy">一键购买</button>
+          </section>
+          <section class="meal-grid">
+            <button type="button" data-action="meal-detail" data-meal="早餐"><strong>早餐</strong><span>鸡蛋青菜粥</span></button>
+            <button type="button" data-action="meal-detail" data-meal="午餐"><strong>午餐</strong><span>香菇滑鸡饭</span></button>
+            <button type="button" data-action="meal-detail" data-meal="夜宵"><strong>夜宵</strong><span>玉米排骨汤</span></button>
+          </section>
+          <section class="share-card">
+            <h2>做完晒单</h2>
+            <p>上传成品照可得 20 积分，常买菜会自动置顶。</p>
+            <button class="soft-btn" type="button" data-action="share-dish">去晒单</button>
+          </section>
+        </div>
+
+        <aside class="cart-bar" aria-live="polite">
+          <button class="cart-summary" type="button" data-action="cart-detail">
+            <strong id="cartCount">0件</strong>
+            <span id="cartTotal">¥0.00</span>
+          </button>
+          <button class="checkout-btn" type="button" data-action="checkout">去结算</button>
+        </aside>
+
+        <nav class="tab-bar" aria-label="底部导航">
+          <button class="active" type="button" data-tab="home"><span>⌂</span>首页</button>
+          <button type="button" data-tab="orders"><span>▣</span>订单</button>
+          <button type="button" data-tab="markets"><span>◎</span>菜场</button>
+          <button type="button" data-tab="profile"><span>♡</span>我的</button>
+          <button type="button" data-tab="freshBox"><span>✦</span>鲜食盒</button>
+        </nav>
+      </section>
+
+      <div class="sheet hidden" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+        <button class="sheet-mask" type="button" data-action="close-sheet" aria-label="关闭"></button>
+        <section class="sheet-panel">
+          <div class="sheet-handle"></div>
+          <header class="sheet-head">
+            <div>
+              <p id="sheetKicker">详情</p>
+              <h2 id="sheetTitle">标题</h2>
+            </div>
+            <button class="round-btn" type="button" data-action="close-sheet" aria-label="关闭">×</button>
+          </header>
+          <div id="sheetBody"></div>
+        </section>
+      </div>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
