@@ -1,0 +1,1600 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>智慧菜篮 · 用户端APP</title>
+    <style>
+:root {
+  --green: #18b978;
+  --green-dark: #087a50;
+  --lime: #d9f76f;
+  --coral: #ff755c;
+  --yellow: #ffd66b;
+  --sky: #dff3ff;
+  --cream: #fffaf0;
+  --ink: #14211b;
+  --muted: #68766f;
+  --line: #e6ece8;
+  --panel: #ffffff;
+  --soft: #f5f8f4;
+  font-family: "Source Han Sans SC", "Noto Sans CJK SC", "Microsoft YaHei", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(24, 185, 120, .22), transparent 26%),
+    radial-gradient(circle at 86% 20%, rgba(255, 117, 92, .18), transparent 24%),
+    linear-gradient(145deg, #f2faf5, #fff7e2 58%, #eef7ff);
+  color: var(--ink);
+}
+button, input { font: inherit; }
+button {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+button, .product-card, .seasonal-card, .sheet-item {
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    background-color .18s ease,
+    border-color .18s ease,
+    opacity .18s ease;
+}
+button:active {
+  transform: scale(.97);
+}
+button:focus-visible {
+  outline: 3px solid rgba(24, 185, 120, .34);
+  outline-offset: 2px;
+}
+
+.phone-shell {
+  width: min(430px, 100vw);
+  min-height: min(920px, 100vh);
+  position: relative;
+}
+.app-screen {
+  position: relative;
+  min-height: min(920px, 100vh);
+  background: linear-gradient(180deg, #fbfff8 0%, #fff9ef 48%, #f7fbff 100%);
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(24, 86, 62, .22);
+}
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 18px 10px;
+}
+.location-pill, .round-btn, .search-box, .shortcut-strip button, .tab-bar button,
+.settings-list button, .section-head button, .soft-btn, .primary-btn, .order-tabs button,
+.cart-summary, .checkout-btn, .qr, .meal-grid button, .map-card {
+  border: 0;
+}
+.location-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  background: rgba(255,255,255,.86);
+  color: var(--ink);
+  padding: 10px 12px;
+  border-radius: 16px;
+  box-shadow: 0 10px 28px rgba(19, 79, 53, .08);
+  backdrop-filter: blur(10px);
+}
+.location-pill:hover, .round-btn:hover, .soft-btn:hover, .shortcut-strip button:hover,
+.settings-list button:hover, .vendor-card button:hover, .meal-grid button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(19, 79, 53, .1);
+}
+.location-pill small, .location-pill strong { display: block; }
+.location-pill small { color: var(--muted); margin-top: 2px; }
+.pin {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  color: var(--green-dark);
+  background: #e9fbf2;
+  border-radius: 10px;
+  font-weight: 900;
+}
+.round-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: #effcf3;
+  color: var(--green-dark);
+  font-weight: 900;
+}
+.search-box {
+  margin: 0 18px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 11px 13px;
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgba(48, 90, 72, .06);
+}
+.search-box span { color: var(--green-dark); font-weight: 900; }
+.search-box input {
+  border: 0;
+  outline: 0;
+  width: 100%;
+  background: transparent;
+  color: var(--ink);
+}
+.content {
+  height: calc(100vh - 174px);
+  min-height: 612px;
+  overflow-y: auto;
+  padding: 0 18px 126px;
+}
+.hidden { display: none !important; }
+
+.hero {
+  min-height: 202px;
+  display: grid;
+  grid-template-columns: 1fr 128px;
+  gap: 12px;
+  align-items: center;
+  padding: 18px;
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, rgba(216, 247, 111, .92), rgba(255, 214, 107, .78) 48%, rgba(223, 243, 255, .9));
+  border: 1px solid rgba(255,255,255,.7);
+  box-shadow: 0 18px 40px rgba(28, 106, 74, .12);
+}
+.hero p, .recipe-card p, .market-card p, .sheet-head p {
+  margin: 0 0 8px;
+  color: var(--green-dark);
+  font-weight: 900;
+}
+.hero h1 {
+  margin: 0 0 16px;
+  line-height: 1.16;
+  font-size: clamp(25px, 7vw, 32px);
+  letter-spacing: 0;
+}
+.hero-actions {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+.hero-visual {
+  aspect-ratio: 1;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 30% 25%, #fff, transparent 34%),
+    linear-gradient(160deg, rgba(255,255,255,.86), rgba(255,255,255,.45));
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  place-items: center;
+  font-size: 33px;
+  box-shadow: inset 0 -16px 0 rgba(8, 122, 80, .1);
+}
+.primary-btn, .soft-btn {
+  border-radius: 16px;
+  padding: 11px 15px;
+  font-weight: 900;
+}
+.primary-btn {
+  background: var(--green);
+  color: #fff;
+  box-shadow: 0 10px 20px rgba(24, 185, 120, .25);
+  position: relative;
+  overflow: hidden;
+}
+.primary-btn:hover, .checkout-btn:hover, .add-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 13px 24px rgba(24, 185, 120, .3);
+}
+.soft-btn {
+  background: #fff;
+  color: var(--green-dark);
+  border: 1px solid var(--line);
+}
+.primary-btn.full, .soft-btn.full { width: 100%; margin-top: 10px; }
+
+.shortcut-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(96px, 1fr));
+  gap: 10px;
+  margin: 14px 0;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+.shortcut-strip button, .meal-grid button {
+  min-height: 78px;
+  border-radius: 18px;
+  background: #fff;
+  padding: 12px;
+  text-align: left;
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 22px rgba(38, 87, 66, .06);
+}
+.shortcut-strip strong, .shortcut-strip span, .meal-grid strong, .meal-grid span { display: block; }
+.shortcut-strip strong { margin-top: 7px; color: var(--green-dark); }
+.shortcut-strip button:nth-child(2) strong { color: #1976b8; }
+.shortcut-strip button:nth-child(4) strong { color: var(--coral); }
+.trust-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.trust-row article {
+  background: rgba(255,255,255,.88);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 11px;
+}
+.trust-row span { display: block; font-size: 12px; color: var(--muted); }
+.trust-row strong { display: block; color: var(--green-dark); margin-top: 4px; }
+.section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin: 20px 0 10px;
+}
+.section-head.compact { margin-top: 16px; }
+h2 { margin: 0; font-size: 20px; letter-spacing: 0; }
+h3 { letter-spacing: 0; }
+p { line-height: 1.45; }
+.section-head p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+.section-head button { background: transparent; color: var(--green-dark); font-weight: 900; }
+.product-list, .vendor-list { display: grid; gap: 10px; }
+
+.seasonal-carousel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.seasonal-card {
+  position: relative;
+  min-height: 214px;
+  border: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  padding: 0;
+  background: #fff;
+  color: #fff;
+  text-align: left;
+  box-shadow: 0 16px 38px rgba(28, 84, 62, .16);
+  transform-origin: center;
+}
+.seasonal-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 45px rgba(28, 84, 62, .2);
+}
+.seasonal-card img {
+  width: 100%;
+  height: 214px;
+  object-fit: cover;
+  display: block;
+  filter: saturate(1.06);
+  transition: transform .45s ease, filter .3s ease;
+}
+.seasonal-card:hover img {
+  transform: scale(1.035);
+  filter: saturate(1.12);
+}
+.seasonal-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.62));
+}
+.seasonal-info {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 14px;
+  z-index: 1;
+}
+.seasonal-info strong {
+  display: block;
+  font-size: 24px;
+  letter-spacing: 0;
+}
+.seasonal-info span {
+  display: block;
+  margin-top: 5px;
+  color: rgba(255,255,255,.86);
+}
+.seasonal-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 12px;
+  margin-top: 9px;
+}
+.seasonal-meta b {
+  color: var(--yellow);
+  font-size: 18px;
+}
+.seasonal-dots {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+}
+.seasonal-dots button {
+  width: 8px;
+  height: 8px;
+  border: 0;
+  border-radius: 999px;
+  background: #d6ddd8;
+  padding: 0;
+}
+.seasonal-dots button.active {
+  width: 22px;
+  background: var(--green);
+}
+
+.product-card, .vendor-card, .pickup-card, .trust-card, .profile-card,
+.settings-list, .recipe-card, .share-card, .market-card, .member-card, .map-card {
+  background: rgba(255,255,255,.92);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 14px;
+  box-shadow: 0 8px 24px rgba(35, 90, 67, .06);
+}
+.product-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  text-align: left;
+}
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(35, 90, 67, .1);
+}
+.product-main {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 74px 1fr;
+  gap: 12px;
+  align-items: center;
+  text-align: left;
+  color: inherit;
+}
+.produce-photo {
+  width: 74px;
+  height: 74px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #f0fff6, #fff4df);
+  overflow: hidden;
+}
+.produce-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.product-card h3, .vendor-card h3 { margin: 0 0 5px; font-size: 17px; }
+.product-card p, .vendor-card p, .recipe-card span, .share-card p { margin: 0; color: var(--muted); font-size: 13px; }
+.tag-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.tag-line span {
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: #effcf3;
+  color: var(--green-dark);
+  font-size: 12px;
+  font-weight: 800;
+}
+.price { color: #e95f45; font-weight: 900; margin-top: 8px; }
+.add-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 15px;
+  border: 0;
+  background: var(--green);
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+  box-shadow: 0 8px 18px rgba(24, 185, 120, .22);
+  position: relative;
+  overflow: hidden;
+}
+
+.pickup-card { border-color: #bfe7d0; background: linear-gradient(180deg, #f7fff8, #ffffff); }
+.status-line, .locker-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+.status-line span { color: var(--green-dark); font-weight: 900; }
+.status-line strong { color: var(--coral); }
+.code-panel {
+  margin: 14px 0;
+  display: grid;
+  grid-template-columns: 1fr 96px;
+  gap: 14px;
+  align-items: center;
+}
+.code-panel p, .code-panel small { margin: 0 0 4px; color: var(--muted); }
+.code-panel strong { display: block; font-size: 34px; letter-spacing: 0; }
+.qr {
+  width: 96px;
+  height: 96px;
+  border-radius: 18px;
+  background:
+    linear-gradient(90deg, #14211b 10px, transparent 10px) 0 0 / 24px 24px,
+    linear-gradient(#14211b 10px, transparent 10px) 0 0 / 24px 24px,
+    #fff;
+  border: 10px solid #fff;
+  box-shadow: 0 0 0 1px var(--line), 0 10px 20px rgba(0,0,0,.08);
+}
+.order-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+  margin: 14px 0;
+}
+.order-tabs button {
+  background: #fff;
+  color: var(--muted);
+  border-radius: 16px;
+  padding: 10px 5px;
+}
+.order-tabs .active { background: var(--green); color: #fff; font-weight: 900; }
+.order-tabs button.active, .tab-bar button.active {
+  animation: popIn .22s ease;
+}
+.order-timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.order-timeline button {
+  border: 0;
+  min-height: 70px;
+  border-radius: 18px;
+  background: #fff;
+  color: var(--muted);
+  padding: 9px 7px;
+}
+.order-timeline span { display: block; margin-top: 5px; font-size: 12px; }
+.order-timeline .done, .order-timeline .active { color: var(--green-dark); font-weight: 900; }
+.order-timeline .active { background: #eafff2; border: 1px solid #bfe7d0; }
+.trust-card dl { margin: 12px 0 0; display: grid; gap: 8px; }
+.trust-card div {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+}
+dt { color: var(--muted); }
+dd { margin: 0; font-weight: 900; text-align: right; }
+
+.market-card.featured {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: start;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #f2fff7, #fff5df);
+  width: 100%;
+  color: inherit;
+  text-align: left;
+}
+.market-card span { color: var(--muted); font-size: 13px; }
+.market-card > strong { color: var(--green-dark); white-space: nowrap; }
+.map-card {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 86px 1fr;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+  color: inherit;
+  text-align: left;
+}
+.map-lines {
+  height: 64px;
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, transparent 35%, var(--green) 36%, var(--green) 42%, transparent 43%),
+    linear-gradient(45deg, transparent 54%, var(--coral) 55%, var(--coral) 61%, transparent 62%),
+    var(--sky);
+}
+.map-card span { display: block; margin-top: 4px; color: var(--muted); font-size: 13px; }
+.vendor-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+.vendor-card button {
+  border: 0;
+  border-radius: 15px;
+  background: #effcf3;
+  color: var(--green-dark);
+  font-weight: 900;
+  padding: 10px 12px;
+}
+.vendor-card .vendor-open {
+  border: 0;
+  background: transparent;
+  text-align: left;
+  color: inherit;
+  padding: 0;
+  flex: 1;
+}
+
+.profile-card {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 22px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--green), #29d091);
+  color: #fff;
+  font-weight: 900;
+  font-size: 24px;
+}
+.profile-card p { margin: 4px 0 0; color: var(--muted); }
+.member-card {
+  margin-bottom: 12px;
+  display: grid;
+  gap: 3px;
+  background: linear-gradient(135deg, #14211b, #0c6b4b);
+  color: #fff;
+  width: 100%;
+  text-align: left;
+}
+.member-card span { color: #c7ffe1; }
+.member-card strong { font-size: 32px; }
+.member-card em { font-style: normal; color: #fff0bd; }
+.settings-list {
+  display: grid;
+  padding: 0;
+  overflow: hidden;
+}
+.settings-list button {
+  min-height: 58px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--line);
+}
+.settings-list button:last-child { border-bottom: 0; }
+.settings-list strong { color: var(--green-dark); }
+
+.recipe-card {
+  min-height: 174px;
+  display: grid;
+  align-content: space-between;
+  background: linear-gradient(135deg, #fff0c8, #e9fff1 58%, #e5f5ff);
+}
+.meal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 12px 0;
+}
+.meal-grid span { margin-top: 7px; color: var(--muted); }
+
+.cart-bar {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 76px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: rgba(20, 33, 27, .94);
+  color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 14px 34px rgba(20, 33, 27, .28);
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.cart-bar.bump {
+  animation: cartBump .32s ease;
+}
+.cart-summary {
+  background: transparent;
+  color: #fff;
+  text-align: left;
+  padding: 7px 5px;
+}
+.cart-summary span { color: #bffbd8; margin-left: 8px; }
+.checkout-btn {
+  border-radius: 16px;
+  background: var(--coral);
+  color: #fff;
+  font-weight: 900;
+  padding: 11px 16px;
+  position: relative;
+  overflow: hidden;
+}
+.tab-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 64px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background: rgba(255,255,255,.94);
+  border-top: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+}
+.tab-bar button {
+  background: transparent;
+  color: var(--muted);
+  display: grid;
+  place-items: center;
+  gap: 2px;
+  font-size: 12px;
+  position: relative;
+}
+.tab-bar button::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--green);
+  opacity: 0;
+  transform: translateY(3px) scale(.7);
+  transition: .18s ease;
+}
+.tab-bar span { font-size: 20px; line-height: 1; }
+.tab-bar .active { color: var(--green-dark); font-weight: 900; }
+.tab-bar .active::after {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.sheet {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+}
+.sheet-mask {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  background: rgba(13, 24, 18, .34);
+  border: 0;
+}
+.sheet-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 82%;
+  overflow: auto;
+  padding: 10px 18px 24px;
+  background: #fffdf7;
+  border-radius: 28px 28px 0 0;
+  box-shadow: 0 -18px 45px rgba(20, 33, 27, .24);
+}
+.sheet-handle {
+  width: 48px;
+  height: 5px;
+  border-radius: 999px;
+  background: #d7dfda;
+  margin: 0 auto 12px;
+}
+.sheet-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.sheet-head h2 { font-size: 22px; }
+.sheet-list { display: grid; gap: 10px; }
+.sheet-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 13px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid var(--line);
+}
+.sheet-item span { color: var(--muted); font-size: 13px; display: block; margin-top: 3px; }
+.sheet-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.sheet-chip {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px;
+  text-align: left;
+}
+.sheet-chip.active { border-color: var(--green); background: #effcf3; color: var(--green-dark); font-weight: 900; }
+.sheet-hero {
+  min-height: 128px;
+  border-radius: 22px;
+  padding: 16px;
+  display: grid;
+  align-content: end;
+  background: linear-gradient(135deg, #d9f76f, #fff0bd 52%, #dff3ff);
+  margin-bottom: 12px;
+}
+.sheet-hero strong { font-size: 40px; }
+.photo-viewer {
+  padding: 0;
+  overflow: hidden;
+  background: #0e1712;
+}
+.photo-viewer img {
+  width: 100%;
+  height: min(360px, 48vh);
+  max-height: 470px;
+  object-fit: contain;
+  display: block;
+  background: #0e1712;
+}
+.photo-caption {
+  padding: 12px 14px 14px;
+  color: #fff;
+}
+.photo-caption span {
+  display: block;
+  margin-top: 4px;
+  color: rgba(255,255,255,.72);
+}
+.sheet-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+.form-box textarea, .form-box input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 12px;
+  outline: 0;
+  background: #fff;
+}
+.form-box textarea { min-height: 96px; resize: vertical; }
+.toast {
+  position: absolute;
+  left: 50%;
+  bottom: 150px;
+  transform: translateX(-50%) translateY(20px);
+  max-width: 86%;
+  padding: 11px 14px;
+  border-radius: 16px;
+  background: rgba(20, 33, 27, .93);
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: .2s ease;
+  text-align: center;
+  z-index: 12;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.ripple-host {
+  position: relative;
+  overflow: hidden;
+}
+.tap-ripple {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  pointer-events: none;
+  background: rgba(255, 255, 255, .55);
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple .52s ease-out forwards;
+}
+.soft-btn .tap-ripple,
+.location-pill .tap-ripple,
+.shortcut-strip button .tap-ripple,
+.settings-list button .tap-ripple,
+.product-main .tap-ripple,
+.vendor-open .tap-ripple,
+.meal-grid button .tap-ripple,
+.cart-summary .tap-ripple {
+  background: rgba(24, 185, 120, .18);
+}
+
+@keyframes ripple {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(16);
+  }
+}
+
+@keyframes cartBump {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.025) translateY(-2px); }
+  100% { transform: scale(1); }
+}
+
+@keyframes popIn {
+  0% { transform: scale(.96); }
+  70% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+body.elder {
+  --ink: #0d1711;
+  --muted: #415047;
+}
+body.elder .app-screen { font-size: 19px; }
+body.elder .content { min-height: 604px; }
+body.elder .shortcut-strip { grid-template-columns: 1fr 1fr; }
+body.elder .trust-row, body.elder .meal-grid, body.elder .sheet-grid { grid-template-columns: 1fr; }
+body.elder .product-card { grid-template-columns: 1fr; }
+body.elder .product-main { grid-template-columns: 78px 1fr; }
+body.elder .product-card .add-btn { grid-column: 1 / -1; width: 100%; border-radius: 16px; }
+
+@media (min-width: 560px) {
+  .app-screen { border-radius: 30px; }
+}
+@media (max-width: 380px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-visual { display: none; }
+  .trust-row, .meal-grid, .code-panel { grid-template-columns: 1fr; }
+}
+
+</style>
+  </head>
+  <body>
+    <main class="phone-shell" aria-label="智慧菜篮用户端APP">
+      <section class="app-screen">
+        <header class="top-bar">
+          <button class="location-pill" type="button" data-action="market-detail" aria-label="查看当前菜场">
+            <span class="pin">⌖</span>
+            <span>
+              <strong>春港社区菜场</strong>
+              <small>距你 680m · 东门自提柜</small>
+            </span>
+          </button>
+          <button class="round-btn" type="button" data-action="notifications" aria-label="消息提醒">铃</button>
+        </header>
+
+        <label class="search-box" aria-label="搜索">
+          <span>⌕</span>
+          <input id="searchInput" type="search" placeholder="搜青菜、摊主、菜谱、取货码" />
+        </label>
+
+        <div class="content" id="homeTab" data-tab-panel="home">
+          <section class="hero">
+            <div>
+              <p>今晚 22:30 前可取 · 24小时自提</p>
+              <h1>下班再晚，也能吃到新鲜实惠的放心菜</h1>
+              <div class="hero-actions">
+                <button class="primary-btn" type="button" data-action="quick-order">15秒下单</button>
+                <button class="soft-btn" type="button" data-action="group-buy">小区团购</button>
+              </div>
+            </div>
+            <div class="hero-visual" aria-hidden="true">
+              <span>🥬</span><span>🍅</span><span>🥩</span><span>🥚</span>
+            </div>
+          </section>
+
+          <section class="shortcut-strip" aria-label="快捷入口">
+            <button type="button" data-action="category" data-category="今日鲜菜">今日鲜菜<strong>36款</strong></button>
+            <button type="button" data-action="category" data-category="热门摊位">热门摊位<strong>8家</strong></button>
+            <button type="button" data-action="repeat-order">一键复购<strong>上次清单</strong></button>
+            <button type="button" data-action="scan-locker">扫码开柜<strong>离线可用</strong></button>
+          </section>
+
+          <section class="trust-row" aria-label="信任信息">
+            <article><span>农残检测</span><strong>未检出</strong></article>
+            <article><span>当日采摘</span><strong>07:20入场</strong></article>
+            <article><span>比超市省</span><strong id="savingText">12.6元</strong></article>
+          </section>
+
+          <section class="section-head">
+            <div>
+              <h2>应季蔬菜推荐</h2>
+              <p>真实照片轮播，点开可查看菜品实拍大图</p>
+            </div>
+            <button type="button" data-action="next-seasonal">换一批</button>
+          </section>
+
+          <section class="seasonal-carousel" id="seasonalCarousel" aria-label="应季蔬菜轮播推荐"></section>
+
+          <section class="section-head compact">
+            <div>
+              <h2>今晚可订</h2>
+              <p>摊主按单备货，可预约早/中/晚/夜间取货</p>
+            </div>
+            <button type="button" data-action="category" data-category="全部商品">全部</button>
+          </section>
+
+          <section class="product-list" id="productList" aria-label="商品列表"></section>
+        </div>
+
+        <div class="content hidden" id="ordersTab" data-tab-panel="orders">
+          <section class="pickup-card">
+            <div class="status-line">
+              <span>待取货</span>
+              <strong id="pickupTimer">剩余 42 分钟</strong>
+            </div>
+            <div class="code-panel">
+              <div>
+                <p>取货码</p>
+                <strong id="pickupCode">A8-2196</strong>
+                <small>无网络也能打开</small>
+              </div>
+              <button class="qr" type="button" data-action="qr-detail" aria-label="查看二维码"></button>
+            </div>
+            <div class="locker-info">
+              <span>春港社区菜场东门自提柜</span>
+              <strong>格口 12</strong>
+            </div>
+            <button class="primary-btn full" type="button" data-action="open-locker">扫码 / 一键开柜</button>
+            <button class="soft-btn full" type="button" data-action="navigate">导航到自提柜</button>
+          </section>
+
+          <section class="order-tabs" aria-label="订单状态">
+            <button class="active" type="button" data-order-status="待取货">待取货</button>
+            <button type="button" data-order-status="待备货">待备货</button>
+            <button type="button" data-order-status="已完成">已完成</button>
+            <button type="button" data-order-status="已取消">已取消</button>
+          </section>
+
+          <section class="order-timeline">
+            <button class="done" type="button" data-action="order-step" data-title="支付成功">支付成功<span>20:12</span></button>
+            <button class="done" type="button" data-action="order-step" data-title="摊主备货">摊主备货<span>20:18</span></button>
+            <button class="active" type="button" data-action="order-step" data-title="已入柜">已入柜<span>20:44</span></button>
+            <button type="button" data-action="order-step" data-title="等待取货">等待取货<span>22:30前</span></button>
+          </section>
+
+          <section class="trust-card">
+            <h2>本单信任卡片</h2>
+            <dl>
+              <div><dt>产地</dt><dd>惠州横沥合作农场</dd></div>
+              <div><dt>采摘</dt><dd>今日 06:10</dd></div>
+              <div><dt>配送</dt><dd>冷链 2小时内到柜</dd></div>
+              <div><dt>农残检测</dt><dd>未检出</dd></div>
+              <div><dt>摊主信用分</dt><dd>96 / 100</dd></div>
+              <div><dt>比超市便宜</dt><dd id="orderSaving">省 12.6 元</dd></div>
+            </dl>
+          </section>
+        </div>
+
+        <div class="content hidden" id="marketsTab" data-tab-panel="markets">
+          <button class="market-card featured" type="button" data-action="market-card-detail">
+            <div>
+              <p>附近菜市场</p>
+              <h2>春港社区菜场</h2>
+              <span>营业 06:00-22:00 · 自提柜 东门 · 夜间可取</span>
+            </div>
+            <strong>98%好评</strong>
+          </button>
+          <button class="map-card" type="button" data-action="map-detail">
+            <div class="map-lines"></div>
+            <div>
+              <strong>自提柜路线</strong>
+              <span>从小区南门步行 4 分钟，支持一键导航</span>
+            </div>
+          </button>
+          <section class="vendor-list" id="vendorList" aria-label="摊位列表"></section>
+        </div>
+
+        <div class="content hidden" id="profileTab" data-tab-panel="profile">
+          <section class="profile-card">
+            <div class="avatar">菜</div>
+            <div>
+              <h2>晚上也要好好吃饭</h2>
+              <p>积分 1280 · 优惠券 3 张 · 连续自提 6 天</p>
+            </div>
+          </section>
+          <button class="member-card" type="button" data-action="membership">
+            <span>本月已省</span>
+            <strong>¥48.6</strong>
+            <em>开通放心菜会员，再享检测赔付</em>
+          </button>
+          <section class="settings-list">
+            <button type="button" data-action="pickup-codes"><span>取货码收藏</span><strong>2个</strong></button>
+            <button type="button" data-action="coupons"><span>积分与优惠券</span><strong>3张可用</strong></button>
+            <button type="button" data-action="preferences"><span>自提偏好</span><strong>夜间优先</strong></button>
+            <button type="button" data-action="feedback"><span>意见反馈</span><strong>去填写</strong></button>
+            <button type="button" data-action="fault"><span>故障上报</span><strong>自提柜/订单</strong></button>
+            <button type="button" data-action="toggle-elder"><span>长辈模式</span><strong id="elderState">关闭</strong></button>
+          </section>
+        </div>
+
+        <div class="content hidden" id="freshBoxTab" data-tab-panel="freshBox">
+          <section class="recipe-card" data-action="recipe-detail">
+            <div>
+              <p>今日晚餐</p>
+              <h2>番茄牛肉汤 + 清炒时蔬</h2>
+              <span>3人份 · 25分钟 · 已搭好调料</span>
+            </div>
+            <button class="primary-btn" type="button" data-action="recipe-buy">一键购买</button>
+          </section>
+          <section class="meal-grid">
+            <button type="button" data-action="meal-detail" data-meal="早餐"><strong>早餐</strong><span>鸡蛋青菜粥</span></button>
+            <button type="button" data-action="meal-detail" data-meal="午餐"><strong>午餐</strong><span>香菇滑鸡饭</span></button>
+            <button type="button" data-action="meal-detail" data-meal="夜宵"><strong>夜宵</strong><span>玉米排骨汤</span></button>
+          </section>
+          <section class="share-card">
+            <h2>做完晒单</h2>
+            <p>上传成品照可得 20 积分，常买菜会自动置顶。</p>
+            <button class="soft-btn" type="button" data-action="share-dish">去晒单</button>
+          </section>
+        </div>
+
+        <aside class="cart-bar" aria-live="polite">
+          <button class="cart-summary" type="button" data-action="cart-detail">
+            <strong id="cartCount">0件</strong>
+            <span id="cartTotal">¥0.00</span>
+          </button>
+          <button class="checkout-btn" type="button" data-action="checkout">去结算</button>
+        </aside>
+
+        <nav class="tab-bar" aria-label="底部导航">
+          <button class="active" type="button" data-tab="home"><span>⌂</span>首页</button>
+          <button type="button" data-tab="orders"><span>▣</span>订单</button>
+          <button type="button" data-tab="markets"><span>◎</span>菜场</button>
+          <button type="button" data-tab="profile"><span>♡</span>我的</button>
+          <button type="button" data-tab="freshBox"><span>✦</span>鲜食盒</button>
+        </nav>
+      </section>
+
+      <div class="sheet hidden" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+        <button class="sheet-mask" type="button" data-action="close-sheet" aria-label="关闭"></button>
+        <section class="sheet-panel">
+          <div class="sheet-handle"></div>
+          <header class="sheet-head">
+            <div>
+              <p id="sheetKicker">详情</p>
+              <h2 id="sheetTitle">标题</h2>
+            </div>
+            <button class="round-btn" type="button" data-action="close-sheet" aria-label="关闭">×</button>
+          </header>
+          <div id="sheetBody"></div>
+        </section>
+      </div>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </main>
+
+    <script>
+const products = [
+  {
+    name: "本地小白菜",
+    vendor: "阿珍鲜菜摊",
+    price: 5.8,
+    unit: "500g",
+    icon: "🥬",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Napa_cabbage.jpg?width=900",
+    source: "Wikimedia Commons · Napa cabbage",
+    tag: "农残未检出",
+    origin: "惠州横沥合作农场",
+    pick: "今日 06:10",
+    desc: "口感清甜，适合清炒、煮面、做粥。摊主按单现拣，入柜前二次称重。"
+  },
+  {
+    name: "沙地番茄",
+    vendor: "老周蔬果",
+    price: 6.6,
+    unit: "500g",
+    icon: "🍅",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Tomato-on-cuttingboard.jpg?width=900",
+    source: "Wikimedia Commons · Tomato on cutting board",
+    tag: "今日采摘",
+    origin: "从化良口基地",
+    pick: "今日 05:40",
+    desc: "酸甜度高，适合番茄牛肉汤和凉拌。支持备注要熟一点或硬一点。"
+  },
+  {
+    name: "胡萝卜",
+    vendor: "绿源菜档",
+    price: 3.9,
+    unit: "500g",
+    icon: "🥕",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Fresh_Carrots_(Unsplash).jpg?width=900",
+    source: "Wikimedia Commons · Fresh Carrots",
+    tag: "比超市省2元",
+    origin: "清远连州农场",
+    pick: "昨日 18:30",
+    desc: "脆甜少筋，适合炖汤和备餐。今晚下单可搭配牛腩享组合价。"
+  },
+  {
+    name: "土鸡蛋",
+    vendor: "春港蛋品",
+    price: 12.8,
+    unit: "10枚",
+    icon: "🥚",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Carton_of_eggs.jpg?width=900",
+    source: "Wikimedia Commons · Carton of eggs",
+    tag: "明码溯源",
+    origin: "河源灯塔养殖场",
+    pick: "今日 08:00",
+    desc: "每盒带批次码，破损包赔。常买用户可设置每周自动补货。"
+  },
+  {
+    name: "鲜切牛腩",
+    vendor: "林记肉档",
+    price: 28.8,
+    unit: "300g",
+    icon: "🥩",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Thinly_sliced_beef.jpg?width=900",
+    source: "Wikimedia Commons · Thinly sliced beef",
+    tag: "冷链到柜",
+    origin: "广州白云放心肉联厂",
+    pick: "今日 09:20",
+    desc: "已切块，适合番茄牛腩和萝卜炖牛腩。全程冷链，入柜温度 4℃。"
+  }
+];
+
+const seasonalVegetables = [
+  {
+    name: "本地小白菜",
+    subtitle: "叶片翠绿，适合清炒和煮面",
+    price: "¥5.80 / 500g",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Napa_cabbage.jpg?width=1000",
+    source: "Wikimedia Commons · Napa cabbage"
+  },
+  {
+    name: "沙地番茄",
+    subtitle: "酸甜多汁，今晚适合做番茄牛肉汤",
+    price: "¥6.60 / 500g",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Tomato-on-cuttingboard.jpg?width=1000",
+    source: "Wikimedia Commons · Tomato on cutting board"
+  },
+  {
+    name: "胡萝卜",
+    subtitle: "脆甜少筋，炖汤、备餐都好用",
+    price: "¥3.90 / 500g",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Fresh_Carrots_(Unsplash).jpg?width=1000",
+    source: "Wikimedia Commons · Fresh Carrots"
+  },
+  {
+    name: "鲜香菇",
+    subtitle: "菌香浓，适合焖饭和滑鸡",
+    price: "¥9.90 / 300g",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Shiitake_mushroom.jpg?width=1000",
+    source: "Wikimedia Commons · Shiitake mushroom"
+  },
+  {
+    name: "西兰花",
+    subtitle: "花球紧实，适合轻食和儿童餐",
+    price: "¥7.90 / 500g",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Broccoli_vegetable.jpg?width=1000",
+    source: "Wikimedia Commons · Broccoli vegetable"
+  }
+];
+
+const vendors = [
+  { name: "阿珍鲜菜摊", score: "4.9", credit: 98, stock: "36款", deal: "青菜第二份半价", fans: "2.8k" },
+  { name: "林记肉档", score: "4.8", credit: 96, stock: "18款", deal: "牛腩晚市特价", fans: "1.9k" },
+  { name: "老周蔬果", score: "4.7", credit: 94, stock: "42款", deal: "番茄 6.6元/斤", fans: "3.1k" },
+  { name: "春港水产", score: "4.8", credit: 95, stock: "15款", deal: "鲈鱼现杀预订", fans: "1.4k" }
+];
+
+const state = {
+  cart: [],
+  elder: false,
+  activeTab: "home",
+  seasonalIndex: 0,
+  selectedSlot: "今晚 21:00-22:30",
+  selectedPay: "微信支付"
+};
+
+const panelMap = {
+  home: "homeTab",
+  orders: "ordersTab",
+  markets: "marketsTab",
+  profile: "profileTab",
+  freshBox: "freshBoxTab"
+};
+
+const productList = document.querySelector("#productList");
+const vendorList = document.querySelector("#vendorList");
+const seasonalCarousel = document.querySelector("#seasonalCarousel");
+const toast = document.querySelector("#toast");
+const sheet = document.querySelector("#sheet");
+const sheetKicker = document.querySelector("#sheetKicker");
+const sheetTitle = document.querySelector("#sheetTitle");
+const sheetBody = document.querySelector("#sheetBody");
+
+function money(value) {
+  return `¥${value.toFixed(2)}`;
+}
+
+function showToast(text) {
+  toast.textContent = text;
+  toast.classList.add("show");
+  window.clearTimeout(showToast.timer);
+  showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 1800);
+}
+
+function addRipple(event) {
+  const target = event.target.closest("button");
+  if (!target || target.disabled) return;
+  target.classList.add("ripple-host");
+  const rect = target.getBoundingClientRect();
+  const ripple = document.createElement("span");
+  ripple.className = "tap-ripple";
+  ripple.style.left = `${event.clientX - rect.left}px`;
+  ripple.style.top = `${event.clientY - rect.top}px`;
+  target.appendChild(ripple);
+  ripple.addEventListener("animationend", () => ripple.remove(), { once: true });
+}
+
+function bumpCart() {
+  const cart = document.querySelector(".cart-bar");
+  cart.classList.remove("bump");
+  void cart.offsetWidth;
+  cart.classList.add("bump");
+}
+
+function openSheet(kicker, title, body) {
+  sheetKicker.textContent = kicker;
+  sheetTitle.textContent = title;
+  sheetBody.innerHTML = body;
+  sheet.classList.remove("hidden");
+}
+
+function closeSheet() {
+  sheet.classList.add("hidden");
+}
+
+function cartTotal() {
+  return state.cart.reduce((sum, item) => sum + item.price, 0);
+}
+
+function renderProducts(list = products) {
+  productList.innerHTML = list.map((item, index) => `
+    <article class="product-card">
+      <button class="product-main" type="button" data-product="${index}" aria-label="查看${item.name}详情">
+        <div class="produce-photo"><img src="${item.image}" alt="${item.name}真实照片" loading="lazy"></div>
+        <div>
+          <h3>${item.name}</h3>
+          <p>${item.vendor} · ${item.tag}</p>
+          <div class="tag-line"><span>可夜间取</span><span>称重透明</span></div>
+          <div class="price">${money(item.price)} / ${item.unit}</div>
+        </div>
+      </button>
+      <button class="add-btn" type="button" aria-label="加入${item.name}" data-add="${index}">+</button>
+    </article>
+  `).join("");
+}
+
+function renderSeasonalCarousel() {
+  const item = seasonalVegetables[state.seasonalIndex];
+  seasonalCarousel.innerHTML = `
+    <button class="seasonal-card" type="button" data-photo="${state.seasonalIndex}" aria-label="查看${item.name}真实照片">
+      <img src="${item.image}" alt="${item.name}应季蔬菜真实照片">
+      <span class="seasonal-info">
+        <strong>${item.name}</strong>
+        <span>${item.subtitle}</span>
+        <span class="seasonal-meta"><b>${item.price}</b><em>点击看大图</em></span>
+      </span>
+    </button>
+    <div class="seasonal-dots" aria-label="应季推荐切换">
+      ${seasonalVegetables.map((veg, index) => `<button type="button" class="${index === state.seasonalIndex ? "active" : ""}" data-seasonal="${index}" aria-label="查看${veg.name}"></button>`).join("")}
+    </div>
+  `;
+}
+
+function renderVendors() {
+  vendorList.innerHTML = vendors.map((vendor, index) => `
+    <article class="vendor-card">
+      <button class="vendor-open" type="button" data-vendor="${index}">
+        <h3>${vendor.name}</h3>
+        <p>评分${vendor.score} · 在售${vendor.stock} · 信用分${vendor.credit}</p>
+        <p>${vendor.deal} · ${vendor.fans}人关注</p>
+      </button>
+      <button type="button" data-follow="${vendor.name}">关注</button>
+    </article>
+  `).join("");
+}
+
+function updateCart() {
+  const count = state.cart.length;
+  const total = cartTotal();
+  document.querySelector("#cartCount").textContent = `${count}件`;
+  document.querySelector("#cartTotal").textContent = money(total);
+  const saving = Math.max(12.6, total * 0.18);
+  document.querySelector("#savingText").textContent = `${saving.toFixed(1)}元`;
+  document.querySelector("#orderSaving").textContent = `省 ${saving.toFixed(1)} 元`;
+}
+
+function addToCart(index) {
+  state.cart.push(products[index]);
+  updateCart();
+  bumpCart();
+  showToast(`${products[index].name} 已加入菜篮`);
+}
+
+function switchTab(tab) {
+  state.activeTab = tab;
+  document.querySelectorAll("[data-tab-panel]").forEach((panel) => panel.classList.add("hidden"));
+  document.querySelector(`#${panelMap[tab]}`).classList.remove("hidden");
+  document.querySelectorAll(".tab-bar button").forEach((button) => {
+    button.classList.toggle("active", button.dataset.tab === tab);
+  });
+}
+
+function productDetail(index) {
+  const item = products[index];
+  openSheet("商品详情", item.name, `
+    <button class="seasonal-card" type="button" data-product-photo="${index}">
+      <img src="${item.image}" alt="${item.name}真实照片">
+      <span class="seasonal-info">
+        <strong>${item.name}</strong>
+        <span>${item.source}</span>
+        <span class="seasonal-meta"><b>${money(item.price)} / ${item.unit}</b><em>点击看大图</em></span>
+      </span>
+    </button>
+    <div class="sheet-list">
+      <div class="sheet-item"><div><b>${item.vendor}</b><span>摊主信用分 96，支持联系摊主备注挑选</span></div><button class="soft-btn" data-vendor-name="${item.vendor}">进摊</button></div>
+      <div class="sheet-item"><div><b>产地与采摘</b><span>${item.origin} · ${item.pick}</span></div><strong>未检出</strong></div>
+      <div class="sheet-item"><div><b>商品说明</b><span>${item.desc}</span></div></div>
+    </div>
+    <div class="sheet-actions">
+      <button class="soft-btn" data-action="contact-vendor">联系摊主</button>
+      <button class="primary-btn" data-add="${index}">加入菜篮</button>
+    </div>
+  `);
+}
+
+function photoViewer(item) {
+  openSheet("真实照片", item.name, `
+    <div class="photo-viewer">
+      <img src="${item.image}" alt="${item.name}真实照片大图">
+      <div class="photo-caption">
+        <b>${item.name}</b>
+        <span>${item.subtitle || item.desc || "真实菜品照片，仅用于原型展示"}</span>
+        <span>图片来源：${item.source}</span>
+      </div>
+    </div>
+    <button class="primary-btn full" data-action="close-sheet">看好了</button>
+  `);
+}
+
+function vendorDetail(index) {
+  const vendor = vendors[index];
+  const goods = products.filter((item) => item.vendor === vendor.name).map((item) => item.name).join("、") || "当季鲜菜、净菜包";
+  openSheet("摊位详情", vendor.name, `
+    <div class="sheet-grid">
+      <div class="sheet-chip active">评分 ${vendor.score}<br><small>近30天好评</small></div>
+      <div class="sheet-chip">信用分 ${vendor.credit}<br><small>平台履约评分</small></div>
+      <div class="sheet-chip">${vendor.stock}<br><small>今日在售</small></div>
+      <div class="sheet-chip">${vendor.fans}<br><small>社区关注</small></div>
+    </div>
+    <div class="sheet-list" style="margin-top:10px">
+      <div class="sheet-item"><div><b>今日特价</b><span>${vendor.deal}</span></div><strong>限时</strong></div>
+      <div class="sheet-item"><div><b>代表商品</b><span>${goods}</span></div></div>
+      <div class="sheet-item"><div><b>服务承诺</b><span>缺斤少两退差价，坏果坏菜当日赔付</span></div></div>
+    </div>
+    <div class="sheet-actions">
+      <button class="soft-btn" data-follow="${vendor.name}">关注摊主</button>
+      <button class="primary-btn" data-action="category" data-category="${vendor.name}">看TA的菜</button>
+    </div>
+  `);
+}
+
+function marketDetail() {
+  openSheet("菜场详情", "春港社区菜场", `
+    <div class="sheet-list">
+      <div class="sheet-item"><div><b>营业时间</b><span>06:00-22:00，线上预订 24小时可下单</span></div><strong>营业中</strong></div>
+      <div class="sheet-item"><div><b>自提柜</b><span>东门 32 格，冷藏/常温分区，离小区南门 4 分钟</span></div><strong>可用28格</strong></div>
+      <div class="sheet-item"><div><b>信任体系</b><span>每日抽检，摊主信用分公开，价格对比透明</span></div><strong>98%好评</strong></div>
+      <div class="sheet-item"><div><b>附近市场</b><span>星河菜市 1.4km · 江湾农贸 2.1km</span></div></div>
+    </div>
+    <div class="sheet-actions">
+      <button class="soft-btn" data-action="map-detail">查看路线</button>
+      <button class="primary-btn" data-action="category" data-category="春港菜场">逛菜场</button>
+    </div>
+  `);
+}
+
+function checkoutSheet() {
+  if (!state.cart.length) {
+    showToast("先选几样菜，再去结算");
+    return;
+  }
+  const items = state.cart.map((item) => `<div class="sheet-item"><div><b>${item.name}</b><span>${item.vendor} · ${item.unit}</span></div><strong>${money(item.price)}</strong></div>`).join("");
+  openSheet("确认订单", "选择取货时间", `
+    <div class="sheet-grid">
+      <button class="sheet-chip ${state.selectedSlot.includes("21:00") ? "active" : ""}" data-slot="今晚 21:00-22:30">今晚<br><small>21:00-22:30</small></button>
+      <button class="sheet-chip" data-slot="明早 07:00-09:00">明早<br><small>07:00-09:00</small></button>
+      <button class="sheet-chip" data-slot="明午 11:30-13:00">明午<br><small>11:30-13:00</small></button>
+      <button class="sheet-chip" data-slot="夜间 22:30-24:00">夜间<br><small>22:30-24:00</small></button>
+    </div>
+    <div class="sheet-list" style="margin-top:10px">${items}</div>
+    <div class="sheet-list" style="margin-top:10px">
+      <div class="sheet-item"><div><b>优惠券</b><span>新人夜间自提券</span></div><strong>-¥3.00</strong></div>
+      <div class="sheet-item"><div><b>支付方式</b><span>${state.selectedPay}</span></div><button class="soft-btn" data-action="pay-method">切换</button></div>
+      <div class="sheet-item"><div><b>合计</b><span>已含称重差价预估</span></div><strong>${money(Math.max(0, cartTotal() - 3))}</strong></div>
+    </div>
+    <button class="primary-btn full" data-action="pay-order">支付并生成取货码</button>
+  `);
+}
+
+function cartDetail() {
+  if (!state.cart.length) {
+    openSheet("菜篮", "还没有选菜", `<div class="sheet-item"><div><b>去首页挑几样今晚吃的菜</b><span>支持一键复购和菜谱食材包</span></div></div>`);
+    return;
+  }
+  openSheet("菜篮", `${state.cart.length}件商品`, `
+    <div class="sheet-list">
+      ${state.cart.map((item) => `<div class="sheet-item"><div><b>${item.name}</b><span>${item.vendor}</span></div><strong>${money(item.price)}</strong></div>`).join("")}
+      <div class="sheet-item"><div><b>预计可省</b><span>按周边超市均价对比</span></div><strong>${Math.max(12.6, cartTotal() * 0.18).toFixed(1)}元</strong></div>
+    </div>
+    <button class="primary-btn full" data-action="checkout">去结算</button>
+  `);
+}
+
+function payOrder() {
+  const code = `A${Math.floor(1 + Math.random() * 8)}-${Math.floor(1000 + Math.random() * 8999)}`;
+  document.querySelector("#pickupCode").textContent = code;
+  closeSheet();
+  switchTab("orders");
+  showToast(`已支付，${state.selectedSlot} 到柜取菜`);
+}
+
+function repeatOrder() {
+  state.cart.push(products[0], products[1], products[3]);
+  updateCart();
+  bumpCart();
+  showToast("已加入上次常买清单");
+}
+
+function recipeBuy() {
+  state.cart.push(products[1], products[2], products[4]);
+  updateCart();
+  bumpCart();
+  showToast("晚餐食材包已加入菜篮");
+}
+
+function toggleElder() {
+  state.elder = !state.elder;
+  document.body.classList.toggle("elder", state.elder);
+  document.querySelector("#elderState").textContent = state.elder ? "开启" : "关闭";
+  showToast(state.elder ? "长辈模式已开启：字体更大、步骤更少" : "长辈模式已关闭");
+}
+
+function infoPanel(action, label = "") {
+  const panels = {
+    notifications: ["消息中心", "备货完成、取货提醒、摊主上新都会在这里推送。", "今晚 20:44 已入柜 · 阿珍鲜菜摊上新小白菜"],
+    "scan-locker": ["扫码开柜", "到柜后对准柜机扫码区，或直接使用离线取货码。", "支持语音提醒：柜门已开，请取走菜品"],
+    "group-buy": ["社区团购", "小区团长可发起拼单，统一配送到自提柜，价格更低。", "春港花园团购：满 20 单再减 8%"],
+    "map-detail": ["自提柜路线", "春港社区菜场东门，步行 4 分钟。", "已规划：小区南门 → 斑马线 → 菜场东门"],
+    coupons: ["积分与优惠券", "积分可抵扣，优惠券按取货时段自动推荐。", "夜间自提券 ¥3 · 满39减5 · 积分1280"],
+    preferences: ["自提偏好", "你可以固定常用菜场、取货时间和支付方式。", "当前：夜间优先 · 微信支付 · 冷藏柜优先"],
+    feedback: ["意见反馈", "告诉我们菜品、价格、取货体验哪里需要改。", "提交后客服会在 24 小时内回复"],
+    fault: ["故障上报", "用于上报柜门打不开、二维码失效、商品缺漏等问题。", "紧急问题会同步通知值班人员"],
+    membership: ["放心菜会员", "会员享检测赔付、夜间免服务费、常买菜补货提醒。", "预计每月多省 ¥18-36"],
+    "pickup-codes": ["取货码收藏", "常用取货码和历史柜口会离线保存。", "A8-2196 · 东门12号格 · 今天22:30前"],
+    "qr-detail": ["取货二维码", "二维码已放大，可直接给柜机扫码。", "取货码 A8-2196 · 离线可用"],
+    "contact-vendor": ["联系摊主", "可以备注菜品大小、熟度、是否去根。", "已为你打开阿珍鲜菜摊对话入口"],
+    "pay-method": ["支付方式", "支持微信、支付宝和积分抵扣组合支付。", "当前使用微信支付"],
+    "share-dish": ["晒单积分", "上传成品照，可获得积分并生成下次复购清单。", "本次晒单预计 +20积分"],
+    "recipe-detail": ["菜谱详情", "番茄牛肉汤搭配清炒时蔬，3人份，25分钟。", "已包含牛腩、番茄、胡萝卜、小白菜和基础调料"],
+    "meal-detail": [`${label}菜谱`, "根据时段推荐快手搭配，可一键生成购物清单。", "可替换口味：少油、低盐、儿童友好"],
+    "order-step": [label || "订单进度", "订单状态实时同步，异常会自动提醒。", "如超过预约时间未取，系统会再次推送提醒"]
+  };
+  const [title, text, note] = panels[action] || ["功能详情", "这个入口已经接入，可继续扩展真实服务。", "原型中先展示关键体验"];
+  openSheet("功能入口", title, `
+    <div class="sheet-list">
+      <div class="sheet-item"><div><b>${text}</b><span>${note}</span></div></div>
+    </div>
+    <div class="form-box" style="margin-top:10px">
+      <textarea placeholder="可输入备注，例如：番茄要熟一点，青菜少一点根"></textarea>
+    </div>
+    <button class="primary-btn full" data-action="close-sheet">知道了</button>
+  `);
+}
+
+document.addEventListener("click", (event) => {
+  addRipple(event);
+  const addButton = event.target.closest("[data-add]");
+  const tabButton = event.target.closest("[data-tab]");
+  const actionButton = event.target.closest("[data-action]");
+  const followButton = event.target.closest("[data-follow]");
+  const productButton = event.target.closest("[data-product]");
+  const productPhotoButton = event.target.closest("[data-product-photo]");
+  const vendorButton = event.target.closest("[data-vendor]");
+  const photoButton = event.target.closest("[data-photo]");
+  const seasonalButton = event.target.closest("[data-seasonal]");
+  const slotButton = event.target.closest("[data-slot]");
+  const orderStatus = event.target.closest("[data-order-status]");
+
+  if (addButton) addToCart(Number(addButton.dataset.add));
+  if (productButton) productDetail(Number(productButton.dataset.product));
+  if (productPhotoButton) photoViewer(products[Number(productPhotoButton.dataset.productPhoto)]);
+  if (photoButton) photoViewer(seasonalVegetables[Number(photoButton.dataset.photo)]);
+  if (seasonalButton) {
+    state.seasonalIndex = Number(seasonalButton.dataset.seasonal);
+    renderSeasonalCarousel();
+  }
+  if (vendorButton) vendorDetail(Number(vendorButton.dataset.vendor));
+  if (tabButton) switchTab(tabButton.dataset.tab);
+  if (followButton) showToast(`已关注${followButton.dataset.follow}，上新会提醒你`);
+  if (slotButton) {
+    state.selectedSlot = slotButton.dataset.slot;
+    checkoutSheet();
+  }
+  if (orderStatus) {
+    document.querySelectorAll("[data-order-status]").forEach((button) => button.classList.toggle("active", button === orderStatus));
+    showToast(`已切换到${orderStatus.dataset.orderStatus}订单`);
+  }
+
+  if (!actionButton) return;
+  const action = actionButton.dataset.action;
+  if (action === "close-sheet") closeSheet();
+  if (action === "checkout") checkoutSheet();
+  if (action === "pay-order") payOrder();
+  if (action === "cart-detail") cartDetail();
+  if (action === "next-seasonal") {
+    state.seasonalIndex = (state.seasonalIndex + 1) % seasonalVegetables.length;
+    renderSeasonalCarousel();
+  }
+  if (action === "quick-order") checkoutSheet();
+  if (action === "repeat-order") repeatOrder();
+  if (action === "recipe-buy") recipeBuy();
+  if (action === "toggle-elder") toggleElder();
+  if (action === "market-detail" || action === "market-card-detail") marketDetail();
+  if (action === "category") {
+    closeSheet();
+    switchTab("home");
+    showToast(`已筛选：${actionButton.dataset.category}`);
+  }
+  if (action === "open-locker") showToast("柜门已打开，请取走本单菜品");
+  if (action === "navigate") infoPanel("map-detail");
+  if (["notifications", "scan-locker", "group-buy", "map-detail", "coupons", "preferences", "feedback", "fault", "membership", "pickup-codes", "qr-detail", "contact-vendor", "pay-method", "share-dish", "recipe-detail"].includes(action)) infoPanel(action);
+  if (action === "meal-detail") infoPanel(action, actionButton.dataset.meal);
+  if (action === "order-step") infoPanel(action, actionButton.dataset.title);
+});
+
+document.querySelector("#searchInput").addEventListener("input", (event) => {
+  const keyword = event.target.value.trim();
+  const filtered = products.filter((item) => `${item.name}${item.vendor}${item.tag}${item.desc}`.includes(keyword));
+  renderProducts(keyword ? filtered : products);
+});
+
+window.setInterval(() => {
+  const timer = document.querySelector("#pickupTimer");
+  const minutes = Number(timer.textContent.match(/\d+/)?.[0] || 42);
+  timer.textContent = `剩余 ${Math.max(1, minutes - 1)} 分钟`;
+}, 60000);
+
+renderProducts();
+renderVendors();
+renderSeasonalCarousel();
+updateCart();
+
+window.setInterval(() => {
+  if (state.activeTab !== "home" || !sheet.classList.contains("hidden")) return;
+  state.seasonalIndex = (state.seasonalIndex + 1) % seasonalVegetables.length;
+  renderSeasonalCarousel();
+}, 4500);
+
+</script>
+  </body>
+</html>
+
