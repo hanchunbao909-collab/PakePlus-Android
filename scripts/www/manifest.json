@@ -1,0 +1,57 @@
+{
+    "@platforms" : [ "android" ],
+    "id" : "",
+    "name" : "智慧菜篮",
+    "version" : {
+        "name" : "1.0.0",
+        "code" : 1
+    },
+    "description" : "菜市场24小时线上预订+自提服务入口",
+    "launch_path" : "index.html",
+    "developer" : {
+        "name" : "智慧菜篮",
+        "email" : "",
+        "url" : ""
+    },
+    "permissions" : {
+        "Internet" : {
+            "description" : "加载真实菜品图片"
+        }
+    },
+    "plus" : {
+        "statusbar" : {
+            "immersed" : true,
+            "background" : "#FBFFF8",
+            "style" : "dark"
+        },
+        "launchwebview" : {
+            "kernel" : "WKWebview",
+            "bounce" : "none",
+            "plusrequire" : "none"
+        },
+        "distribute" : {
+            "ios" : {
+                "dSYMs" : false
+            }
+        }
+    },
+    "app-plus" : {
+        "distribute" : {
+            "android" : {
+                "packagename" : "com.smartbasket.app",
+                "permissionExternalStorage" : {
+                    "request" : "none"
+                },
+                "permissions" : [ "<uses-permission android:name=\"android.permission.INTERNET\"/>" ]
+            },
+            "icons" : {
+                "android" : {
+                    "hdpi" : "",
+                    "xhdpi" : "",
+                    "xxhdpi" : "",
+                    "xxxhdpi" : ""
+                }
+            }
+        }
+    }
+}
